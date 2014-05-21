@@ -1,6 +1,10 @@
 pull-request-reviewer
 =====================
 
+![anim.gif](anim.gif)
+
+# Install
+
 1.  Clone this repo.
 2.  Install tampermonkey chrome extension: https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en
 3.  Go to the tampermonkey dashboard and add the pull-request-reviewer.js script.  
