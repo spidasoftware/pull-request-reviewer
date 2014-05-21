@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name       Github Pull Request Review Helper Thingy by Jeremy Wentworth
+// @name       Github Pull Request Reviewer by Jeremy Wentworth
 // @namespace  http://spidasoftware.com/
 // @version    0.1
 // @description  Give some order to your pull request
@@ -8,19 +8,6 @@
 // @require http://code.jquery.com/jquery-latest.js
 // @require http://code.jquery.com/ui/1.10.3/jquery-ui.js
 // ==/UserScript==
-
-
-///////////////////////////////////////////////////////////////
-// TODO
-//   - change open file button to open in a new tab
-//   - Save the file order in local storage
-//   - Load the file order from local storage
-//   - Save the file order in the comments
-//   - Load the file order from the comments
-//   - Mark Important Lines
-//   - Mark Important Files
-//   - Mark Reviewed Files
-///////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////
