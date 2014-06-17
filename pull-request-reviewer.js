@@ -7,25 +7,36 @@ console.time("Total");
 // @match      https://github.com/*/*/pull/*
 // @match      https://github.com/*/*/pulls
 // @match      https://github.com/spidasoftware/*
+// @match      https://github.com/orgs/spidasoftware/dashboard/pulls
+// @match      https://github.com/organizations/spidasoftware/dashboard/pulls/private
 // @copyright  2013+, Jeremy Wentworth (SPIDAWeb)
 // @require http://code.jquery.com/jquery-latest.js
 // @require http://code.jquery.com/ui/1.10.3/jquery-ui.js
 // @require //cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js
 // @require https://raw.githubusercontent.com/andris9/jStorage/master/jstorage.js
 // ==/UserScript==
-var requestAnimationFrame = window.requestAnimationFrame;
+//var requestAnimationFrame = window.requestAnimationFrame;
 
 console.time("Style");
+
+var pathName = window.location.pathname;
+
+$("#site-container").bind("DOMSubtreeModified", function() {
+    $(".list-group-item-name").each(function(u, elementIterator7){
+        var reposLink = $(elementIterator7).children().first().next();
+        var pullLink = reposLink.next();
+        reposLink.attr('href', pullLink.attr('href'));
+    });
+});
+
 ///////////////////////////////////////////////////////////////
 // Style
 ///////////////////////////////////////////////////////////////
-$(".container").width("80%");
-var sideBar = document.getElementsByClassName("repository-sidebar clearfix");
-sideBar[0].style.width = "17%";
+$(".container").width("93%");
 $("#js-repo-pjax-container").width("80%");
 $(".meta").css("padding","0px 10px");
 $(".file").css("margin-bottom","3px");
-console.timeEnd("Style");
+//console.timeEnd("Style");
 
 ///////////////////////////////////////////////////////////////
 // DnD Sort
@@ -37,16 +48,11 @@ $("#files").sortable({
     stop: function( event, ui ) {
         console.time("Event");
         $.jStorage.flush();
-        var list = document.getElementsByClassName("file js-details-container");
-        var length6 = list.length;
-        var x = 0;
-        for(var y =0; y < length6; y++){
-            var tempId = list[y].id;
-            if(tempId.indexOf("diff") >= 0){
-                $.jStorage.set(x, tempId);
-                x++;
-            }
-        }
+        $(".file.js-details-container").each(function(y, elementIterator6){
+            var updatedTempChild = $(elementIterator6).children().first();
+            var updatedDataPath = $(updatedTempChild).attr('data-path');
+            $.jStorage.set(y, updatedDataPath);
+        });
         console.timeEnd("Event");
     }
 });
@@ -139,98 +145,88 @@ console.timeEnd("Buttons");
 
     //Change "View" button to "Open" and now opens in new tab
     console.time("View");
-    var view1 = document.getElementsByClassName("minibutton tooltipped tooltipped-s");
-    var length = view1.length;
-    for(var i = 0; i < length; i++){
-            view1[i].target = "_blank";
-    }
+    $(".minibutton.tooltipped.tooltipped-s").each(function(i, elementIterator4){
+            elementIterator4.target = "_blank";
+    });
     console.timeEnd("View");
 
 requestAnimationFrame(function() {
     console.time("View2");
-    for(var b = 0; b < length; b++){
-        if(view1[b].innerText === "View"){
-            view1[b].innerText = "Open";
+    $(".minibutton.tooltipped.tooltipped-s").each(function(b, elementIterator5){
+        if(elementIterator5.innerText === "View"){
+            elementIterator5.innerText = "Open";
         }
-    }
+    });
     console.timeEnd("View2");
 });
 
-    console.time("Repo Link");
     //Repository link doesn't open repository anymore, now opens pull request
-    var mainRepo = document.getElementsByClassName("js-navigation-open");
-    var length2 = mainRepo.length;
-    var pullLink = document.getElementsByClassName("css-truncate css-truncate-target");
-    var j = 0;
-for(var k = 0; k < length2; k++){
-    if(mainRepo[k].className === "js-navigation-open"){
-        var tempLink = mainRepo[k].href;
-        var childList = pullLink[j].getElementsByTagName("a");
-        childList[0].href = tempLink;
-        j++;
-    }
-}
+    //console.log(parentForLinks);
+$(".list-group-item-name").each(function(w, elementIterator3){
+    var reposLink = $(elementIterator3).children().first().next();
+    var pullLink = reposLink.next();
+    reposLink.attr('href', pullLink.attr('href'));
+
+});
+
 console.timeEnd("Repo Link");
 
 //File location abbreviated
     console.time("File Location");
-    var text = document.getElementsByClassName("js-selectable-text");
-    var length4 = text.length;
-    var text1 = [];
-for(var m = 0; m < length4; m++){
-    var stringLength = text[m].innerText.length;        
-    if(stringLength > 75){
-            var start = stringLength - 72;
-            text1[m] = "..." + text[m].innerText.substring(start, stringLength);
+    var arrayOfLocations = [];
+$(".js-selectable-text").each(function(m, elementIterator) {
+    var stringLength = elementIterator.innerText.length;        
+    if(stringLength > 48){
+            var start = stringLength - 45;
+            arrayOfLocations[m] = "..." + elementIterator.innerText.substring(start, stringLength);
         }
     else{
-        text1[m] = text[m].innerText;
+        arrayOfLocations[m] = elementIterator.innerText;
     }
-}
+});
     console.timeEnd("File Location");
 
 requestAnimationFrame(function() {
     console.time("File2");
-    for(var v = 0; v < length4; v++){
-        text[v].innerText = text1[v];
-    }
+    $(".js-selectable-text").each(function(v, elementIterator2) {
+        elementIterator2.innerText = arrayOfLocations[v];
+    });
     console.timeEnd("File2");
 });
 
 //jStorage
 function getIndex(node){
-    var fileElement2 = document.getElementById("files");
+    var fileElement2 = $("#files")[0];
     var childList = fileElement2.childNodes;
-    var length9 = fileElement2.childNodes.length;
-    var check2 = false;
-    var index = 0;
+    var lengthOfFilesChildNodes = fileElement2.childNodes.length;
+    var checkForId = false;
+    var indexOfMatch = 0;
     var f = 0;
-    while(!check2 && f < length9){ 
+    while(!checkForId && f < lengthOfFilesChildNodes){ 
         if(node.id === childList[f].id){
-            check2 = true;
-            index = f;
+            checkForId = true;
+            indexOfMatch = f;
         }
        f++;
     }
-    return index;
+    return indexOfMatch;
 }
 
 function jStorage(){
     console.time("jStorage");
-    var list = document.getElementsByClassName("file js-details-container");
-    var fileElement = document.getElementById("files");
-    var length5 = list.length;
-for(var q = 0; q < length5; q++){
-    for(var p = 0; p < length5; p++){
-        var tempId2 = list[p].id;
-        var value = $.jStorage.get(q);
-        if(tempId2 === value){
-            var fileIndex = getIndex(list[p]);
-            var tempNode = fileElement.removeChild(fileElement.childNodes[fileIndex]);
-            fileElement.appendChild(tempNode);
+    var fileElement = $("#files")[0];
+    $(".file.js-details-container").each(function(outterCounter, outterStorageIteration){
+        $(".file.js-details-container").each(function(innerCounter, innerStorageIteration){
+            var tempChild = $(innerStorageIteration).children().first();
+            var dataPath = $(tempChild).attr('data-path');
+            var value = $.jStorage.get(outterCounter);
+            if(dataPath === value){
+                var fileIndex = getIndex(innerStorageIteration);
+                var tempNode = fileElement.removeChild(fileElement.childNodes[fileIndex]);
+                fileElement.appendChild(tempNode);
         }
-    }
-}
+    });
+});
     console.timeEnd("jStorage");
 }
 requestAnimationFrame(jStorage);
