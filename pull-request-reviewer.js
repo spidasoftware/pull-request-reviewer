@@ -15,15 +15,12 @@ console.time("Total");
 // @require //cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js
 // @require https://raw.githubusercontent.com/andris9/jStorage/master/jstorage.js
 // ==/UserScript==
-//var requestAnimationFrame = window.requestAnimationFrame;
 
-console.time("Style");
-
-var pathName = window.location.pathname;
+var requestAnimationFrame = window.requestAnimationFrame;
 
 $("#site-container").bind("DOMSubtreeModified", function() {
-    $(".list-group-item-name").each(function(u, elementIterator7){
-        var reposLink = $(elementIterator7).children().first().next();
+    $(".list-group-item-name").each(function(u, elementIterator){
+        var reposLink = $(elementIterator).children().first().next();
         var pullLink = reposLink.next();
         reposLink.attr('href', pullLink.attr('href'));
     });
@@ -32,11 +29,12 @@ $("#site-container").bind("DOMSubtreeModified", function() {
 ///////////////////////////////////////////////////////////////
 // Style
 ///////////////////////////////////////////////////////////////
+console.time("Style");
 $(".container").width("93%");
 $("#js-repo-pjax-container").width("80%");
 $(".meta").css("padding","0px 10px");
 $(".file").css("margin-bottom","3px");
-//console.timeEnd("Style");
+console.timeEnd("Style");
 
 ///////////////////////////////////////////////////////////////
 // DnD Sort
@@ -48,8 +46,8 @@ $("#files").sortable({
     stop: function( event, ui ) {
         console.time("Event");
         $.jStorage.flush();
-        $(".file.js-details-container").each(function(y, elementIterator6){
-            var updatedTempChild = $(elementIterator6).children().first();
+        $(".file.js-details-container").each(function(y, elementIterator){
+            var updatedTempChild = $(elementIterator).children().first();
             var updatedDataPath = $(updatedTempChild).attr('data-path');
             $.jStorage.set(y, updatedDataPath);
         });
@@ -145,28 +143,27 @@ console.timeEnd("Buttons");
 
     //Change "View" button to "Open" and now opens in new tab
     console.time("View");
-    $(".minibutton.tooltipped.tooltipped-s").each(function(i, elementIterator4){
-            elementIterator4.target = "_blank";
+    $(".minibutton.tooltipped.tooltipped-s").each(function(i, elementIterator){
+            elementIterator.target = "_blank";
     });
     console.timeEnd("View");
 
 requestAnimationFrame(function() {
     console.time("View2");
-    $(".minibutton.tooltipped.tooltipped-s").each(function(b, elementIterator5){
-        if(elementIterator5.innerText === "View"){
-            elementIterator5.innerText = "Open";
+    $(".minibutton.tooltipped.tooltipped-s").each(function(b, elementIterator){
+        if(elementIterator.innerText === "View"){
+            elementIterator.innerText = "Open";
         }
     });
     console.timeEnd("View2");
 });
 
     //Repository link doesn't open repository anymore, now opens pull request
-    //console.log(parentForLinks);
-$(".list-group-item-name").each(function(w, elementIterator3){
-    var reposLink = $(elementIterator3).children().first().next();
+console.timeEnd("Repo Link");
+$(".list-group-item-name").each(function(w, elementIterator){
+    var reposLink = $(elementIterator).children().first().next();
     var pullLink = reposLink.next();
     reposLink.attr('href', pullLink.attr('href'));
-
 });
 
 console.timeEnd("Repo Link");
@@ -188,8 +185,8 @@ $(".js-selectable-text").each(function(m, elementIterator) {
 
 requestAnimationFrame(function() {
     console.time("File2");
-    $(".js-selectable-text").each(function(v, elementIterator2) {
-        elementIterator2.innerText = arrayOfLocations[v];
+    $(".js-selectable-text").each(function(v, elementIterator) {
+        elementIterator.innerText = arrayOfLocations[v];
     });
     console.timeEnd("File2");
 });
@@ -215,11 +212,11 @@ function getIndex(node){
 function jStorage(){
     console.time("jStorage");
     var fileElement = $("#files")[0];
-    $(".file.js-details-container").each(function(outterCounter, outterStorageIteration){
+    $(".file.js-details-container").each(function(outerCounter, outerStorageIteration){
         $(".file.js-details-container").each(function(innerCounter, innerStorageIteration){
             var tempChild = $(innerStorageIteration).children().first();
             var dataPath = $(tempChild).attr('data-path');
-            var value = $.jStorage.get(outterCounter);
+            var value = $.jStorage.get(outerCounter);
             if(dataPath === value){
                 var fileIndex = getIndex(innerStorageIteration);
                 var tempNode = fileElement.removeChild(fileElement.childNodes[fileIndex]);
