@@ -8,7 +8,7 @@
 // @match      https://github.com/spidasoftware/*
 // @match      https://github.com/orgs/spidasoftware/dashboard/pulls
 // @match      https://github.com/organizations/spidasoftware/dashboard/pulls/private
-// @copyright  2013+, Jeremy Wentworth (SPIDAWeb)
+// @copyright  2013+, SPIDAWeb LLC
 // @require http://code.jquery.com/jquery-latest.js
 // @require http://code.jquery.com/ui/1.10.3/jquery-ui.js
 // @require //cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js
